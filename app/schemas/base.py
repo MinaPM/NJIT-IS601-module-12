@@ -3,10 +3,10 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict, model_validator
 
 class UserBase(BaseModel):
     """Base user schema with common fields."""
-    first_name: str = Field(max_length=50, example="John")
-    last_name: str = Field(max_length=50, example="Doe")
-    email: EmailStr = Field(example="john.doe@example.com")
-    username: str = Field(min_length=3, max_length=50, example="johndoe")
+    first_name: str = Field(max_length=50, json_schema_extra={"example": "John"})
+    last_name: str = Field(max_length=50, json_schema_extra={"example": "Doe"})
+    email: EmailStr = Field(json_schema_extra={"example": "john.doe@example.com"})
+    username: str = Field(min_length=3, max_length=50, json_schema_extra={"example": "johndoe"})
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -14,8 +14,8 @@ class PasswordMixin(BaseModel):
     password: str = Field(
         ...,
         min_length=8,
-        example="SecurePass123!",
-        description="Password"
+        description="Password",
+        json_schema_extra={"example": "SecurePass123!"},
     )
 
     @model_validator(mode="after")
@@ -43,5 +43,5 @@ class UserLogin(BaseModel):
     Schema for user login credentials.
     Contains the username and password.
     """
-    username: str = Field(min_length=3, max_length=50, example="johndoe")
-    password: str = Field(min_length=8, example="supersecretpassword")
+    username: str = Field(min_length=3, max_length=50, json_schema_extra={"example": "johndoe"})
+    password: str = Field(min_length=8, json_schema_extra={"example": "supersecretpassword"})
